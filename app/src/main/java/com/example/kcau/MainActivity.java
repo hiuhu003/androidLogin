@@ -7,15 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputLayout;
 
 public class MainActivity extends AppCompatActivity {
     // Declare UI components
-    private TextInputLayout name, username, password;
+    private TextInputLayout username, password;
     private TextView create, change_pass;
     private Button login;
     private LoginData ld;
@@ -25,13 +24,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Hide the action bar
+        // Set up the toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        TextView toolbarTitle = findViewById(R.id.toolbar_title);
+        toolbarTitle.setText("KCA UNIVERSITY");
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
         // Initialize UI components
-        name = findViewById(R.id.et_name);
         username = findViewById(R.id.et_username);
         password = findViewById(R.id.et_password);
         login = findViewById(R.id.login_button);
@@ -56,67 +58,53 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Retrieve user input
-                String nameInput = name.getEditText() != null ? name.getEditText().getText().toString().trim() : "";
-                String usernameInput = username.getEditText() != null ? username.getEditText().getText().toString().trim() : "";
-                String passwordInput = password.getEditText() != null ? password.getEditText().getText().toString() : "";
+                String usernameInput = getTextInput(username);
+                String passwordInput = getTextInput(password);
 
                 // Validate input fields
-                if (nameInput.isEmpty() || usernameInput.isEmpty() || passwordInput.isEmpty()) {
+                if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
                     showMessage("ERROR!!", "EMPTY FIELDS");
                     return;
                 }
 
                 // Validate login credentials
-                Cursor loginStatus = null;
-                try {
-                    loginStatus = ld.validate(nameInput, usernameInput, passwordInput);
+                try (Cursor loginStatus = ld.validate(usernameInput, passwordInput)) {
                     if (loginStatus != null && loginStatus.getCount() > 0) {
-                        // Successful login
                         Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                        Intent in = new Intent(getApplicationContext(), Home.class);
-                        startActivity(in);
+                        startActivity(new Intent(getApplicationContext(), Home.class));
                     } else {
-                        // Failed login
                         showMessage("ERROR...", "Invalid username or password");
                     }
                 } catch (Exception e) {
                     showMessage("ERROR", "An error occurred: " + e.getMessage());
-                } finally {
-                    if (loginStatus != null) {
-                        loginStatus.close();
-                    }
                 }
             }
         });
     }
 
-
+    private String getTextInput(TextInputLayout inputLayout) {
+        return inputLayout.getEditText() != null ? inputLayout.getEditText().getText().toString().trim() : "";
+    }
 
     private void createUser() {
-        create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Create_Acc.class);
-                startActivity(i);
-            }
+        create.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), Create_Acc.class);
+            startActivity(i);
         });
     }
 
     private void changePassword() {
-        change_pass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ChangePass.class);
-                startActivity(i);
-            }
+        change_pass.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), ChangePass.class);
+            startActivity(i);
         });
     }
 
     private void showMessage(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
+        new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .setTitle(title)
+                .setMessage(message)
+                .show();
     }
 }
