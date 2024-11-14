@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "390920015494",
+    "project_id": "loginkca",
+    "storage_bucket": "loginkca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390920015494:android:4145bcb9197bfb85484b07",
+        "android_client_info": {
+          "package_name": "com.example.login_kca"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0XIhDLMm0-l99Si-HUVKyCR7y3_mWqqc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390920015494:android:c6c7adf380867466484b07",
+        "android_client_info": {
+          "package_name": "com.group.D1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0XIhDLMm0-l99Si-HUVKyCR7y3_mWqqc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
